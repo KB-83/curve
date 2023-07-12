@@ -1,15 +1,18 @@
 package client.view;
 
+import client.ClientController;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class CurveCustomFrame extends JFrame {
 //    GraphicManager gM;
     public CardPanel cardPanel;
-    public CurveCustomFrame() {
-
+    private ClientController clientController;
+    public CurveCustomFrame(ClientController clientController) {
+        this.clientController = clientController;
 //        this.gM = gM;
-        this.cardPanel = new CardPanel();
+        this.cardPanel = new CardPanel(clientController);
         this.setFocusable(false);
         this.add(cardPanel);
         this.pack();// check

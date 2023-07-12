@@ -1,16 +1,20 @@
 package client.view;
 
+import client.ClientController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginPanel extends CurveCustomPanel{
+
     private CardPanel cardPanel;
     private JButton start;
     JLabel usernameLabel = new JLabel("Username:");
     JTextField usernameField = new JTextField();
-    public LoginPanel(CardPanel cardPanel) {
+    public LoginPanel(CardPanel cardPanel, ClientController clientController) {
+        super(clientController);
         this.cardPanel = cardPanel;
         setLayout(null);
         setButtons();
@@ -37,8 +41,24 @@ public class LoginPanel extends CurveCustomPanel{
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardPanel.getCardLayout().show(cardPanel,"SEARCH");
+                getClientController().joinRequest(usernameField.getText());
             }
         });
+    }
+
+    public CardPanel getCardPanel() {
+        return cardPanel;
+    }
+
+    public JButton getStart() {
+        return start;
+    }
+
+    public JLabel getUsernameLabel() {
+        return usernameLabel;
+    }
+
+    public JTextField getUsernameField() {
+        return usernameField;
     }
 }

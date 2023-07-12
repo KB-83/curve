@@ -1,7 +1,7 @@
-package server.controller.datacontroller;
+package client;
 
 public class UDPResponse {
-    //0 answare of logim
+    //0 answare of login
     //1 playersArrayList
     private int type;
     private String massage;
@@ -30,4 +30,3 @@ public class UDPResponse {
         this.massage = massage;
     }
 }
-

@@ -1,5 +1,6 @@
 package client.view;
 
+import client.ClientController;
 import client.controller.GamePainter;
 import client.models.Game;
 
@@ -9,8 +10,8 @@ import java.awt.*;
 public class GamePanel extends CurveCustomPanel {
     private Game game;
     private GamePainter gamePainter;
-    public GamePanel() {
-
+    public GamePanel(ClientController clientController) {
+        super(clientController);
         setLayout(null);
         gamePainter = new GamePainter();
 

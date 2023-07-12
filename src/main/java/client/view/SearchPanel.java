@@ -1,5 +1,7 @@
 package client.view;
 
+import client.ClientController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,12 +11,11 @@ import java.util.Arrays;
 
 public class SearchPanel extends CurveCustomPanel{
     private CardPanel cardPanel;
-    private ArrayList<String> players;
     private JComboBox<String> themeComboBox;
     private JButton start;
-    public SearchPanel(ArrayList<String> players,CardPanel cardPanel) {
+    public SearchPanel(CardPanel cardPanel, ClientController clientController) {
+        super(clientController);
         this.cardPanel = cardPanel;
-        this.players = players;
         setLayout(null);
         setupUI();
     }
@@ -35,11 +36,7 @@ public class SearchPanel extends CurveCustomPanel{
         themeLabel.setBounds(200,300,200,50);
         themeLabel.setForeground(Color.CYAN);
         add(themeLabel);
-        themeComboBox = new JComboBox<>(players.toArray(new String[0]));
-        themeComboBox.setBounds(500,300,200,50);
-        themeComboBox.setForeground(Color.CYAN);
-        themeComboBox.setBackground(Color.black);
-        add(themeComboBox);
+
         JButton selectButton = new JButton("Select");
         selectButton.addActionListener(new ActionListener() {
             @Override
@@ -50,6 +47,18 @@ public class SearchPanel extends CurveCustomPanel{
             });
             add(selectButton);
             add(start);
+        }
+        public void setPlayers(ArrayList<String> players) {
+        if (themeComboBox != null) {
+            remove(themeComboBox);
+        }
+            themeComboBox = new JComboBox<>(players.toArray(new String[0]));
+            themeComboBox.setBounds(500,300,200,50);
+            themeComboBox.setForeground(Color.CYAN);
+            themeComboBox.setBackground(Color.black);
+            add(themeComboBox);
+            revalidate();
+            repaint();
         }
     }
 

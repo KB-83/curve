@@ -1,6 +1,6 @@
 package client;
 
-public class TCPRequest {
+public class TCPRequest extends Request{
     private String name;
 
     public TCPRequest(String name) {

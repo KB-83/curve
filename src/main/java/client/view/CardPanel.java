@@ -1,5 +1,7 @@
 package client.view;
 
+import client.ClientController;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -9,18 +11,15 @@ public class CardPanel extends CurveCustomPanel{
     private LoginPanel loginPanel;
     private SearchPanel searchPanel;
 
-    public CardPanel() {
+    public CardPanel(ClientController clientController) {
+        super(clientController);
 //        this.gM = gM;
 //        this.frame = frame;
         // other panels going to be added here
-        this.gamePanel = new GamePanel();
-        this.loginPanel = new LoginPanel(this);
-        //test
-        ArrayList<String> players = new ArrayList();
-        players.add("kb");
-        players.add("jafar");
-        players.add("akbar");
-        this.searchPanel = new SearchPanel(players,this);
+        this.gamePanel = new GamePanel(clientController);
+        this.loginPanel = new LoginPanel(this,clientController);
+
+        this.searchPanel = new SearchPanel(this,clientController);
         // panel settings
 
         this.setLayout(cardLayout);
@@ -35,5 +34,17 @@ public class CardPanel extends CurveCustomPanel{
 
     public CardLayout getCardLayout() {
         return cardLayout;
+    }
+
+    public SearchPanel getSearchPanel() {
+        return searchPanel;
+    }
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    public LoginPanel getLoginPanel() {
+        return loginPanel;
     }
 }

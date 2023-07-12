@@ -3,6 +3,7 @@ package server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import server.controller.datacontroller.UDPRequest;
+import server.controller.datacontroller.UDPResponse;
 import server.model.Client;
 import server.model.Game;
 import server.model.TCPServer;
@@ -29,7 +30,7 @@ public class ServerController {
             byte[] receiveData = new byte[60000];
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             udpServer.getUdpServerSocket().receive(receivePacket);
-            String jsonRequest = receivePacket.toString();
+            String jsonRequest = new String(receivePacket.getData(), 0, receivePacket.getLength());
             UDPRequest udpRequest = objectMapper.readValue(jsonRequest,UDPRequest.class);
             controlUDPRequest(udpRequest,receivePacket);
 
@@ -59,14 +60,19 @@ public class ServerController {
     }
     private void controlUDPRequest(UDPRequest udpRequest,DatagramPacket receivePacket) {
         int requestNum = udpRequest.getRequestNum();
+        //todo : you can return response as json
         switch (requestNum){
             case 0:
                 if (clients.size() == 20) {
-                    return;//response room is full
+                    UDPResponse udpResponse = new UDPResponse(0,"FULL");
+                    sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,receivePacket.getAddress(),receivePacket.getPort());
+                    return;
                 }
                 for (int i = 0; i < clients.size(); i++){
                     if (clients.get(i).getUserName().equals(udpRequest.getUserName())) {
-                        return;// username taken
+                        UDPResponse udpResponse = new UDPResponse(0,"TAKEN");
+                        sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,receivePacket.getAddress(),receivePacket.getPort());
+                        return;
                     }
                 }
                 Client client = new Client(receivePacket.getAddress(), receivePacket.getPort(), udpRequest.getUserName());
@@ -74,6 +80,11 @@ public class ServerController {
                 client.setClientController(clientController);
                 clientController.control();
                 clients.add(client);
+                UDPResponse udpResponse = new UDPResponse(0,"TRUE");
+                sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,receivePacket.getAddress(),receivePacket.getPort());
+                for (int i = 0;i < clients.size(); i++) {
+                    sendClients(udpServer.getUdpServerSocket(),clients.get(i).getInetAddress(),clients.get(i).getPort(),clients.get(i).getUserName());
+                }
                 break;
             case 1 :
                 for (int i = 0 ; i < clients.size() ; i++) {
@@ -85,5 +96,30 @@ public class ServerController {
                 break;
         }
 
+    }
+    private void sendUdpMessage(DatagramSocket serverSocket, UDPResponse udpResponse,
+                                InetAddress address, int port) {
+        try {
+            byte[] sendData = objectMapper.writeValueAsString(udpResponse).getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, address, port);
+            serverSocket.send(sendPacket);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void sendClients(DatagramSocket serverSocket,InetAddress address, int port,String userName) {
+        ArrayList<String> clientsName = new ArrayList<>();
+        for (int i = 0 ; i < clients.size(); i++) {
+            if (!clients.get(i).getUserName().equals(userName)) {
+                clientsName.add(clients.get(i).getUserName());
+            }
+        }
+        try {
+            UDPResponse udpResponse = new UDPResponse(1,objectMapper.writeValueAsString(clientsName));
+            sendUdpMessage(serverSocket,udpResponse,address,port);
+            System.out.println("124");
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
