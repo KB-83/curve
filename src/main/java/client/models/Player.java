@@ -4,10 +4,13 @@ package client.models;
 public class Player {
     private Snake snake;
     private Gift gift;
+    private String name;
 
-    public Player(Snake snake, Gift gift) {
-        this.snake = snake;
-        this.gift = gift;
+    public Player() {
+    }
+
+    public Player(String name) {
+        this.name = name;
     }
 
     public Gift getGift() {
@@ -25,4 +28,13 @@ public class Player {
     public void setSnake(Snake snake) {
         this.snake = snake;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

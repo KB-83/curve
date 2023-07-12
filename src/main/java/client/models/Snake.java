@@ -4,6 +4,9 @@ public class Snake {
     private SnakeHead snakeHead;
     private SnakeBody snakeBody;
 
+    public Snake() {
+    }
+
     public SnakeHead getSnakeHead() {
         return snakeHead;
     }

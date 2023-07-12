@@ -12,11 +12,13 @@ public class Client {
     private ClientController clientController;
     private Player player;
     private String userName;
+    private boolean isWaiting;
 
     public Client(InetAddress inetAddress,int port,String userName) {
         this.inetAddress = inetAddress;
         this.port = port;
         this.userName = userName;
+        isWaiting = true;
     }
 
     public InetAddress getInetAddress() {
@@ -65,5 +67,13 @@ public class Client {
 
     public void setClientController(ClientController clientController) {
         this.clientController = clientController;
+    }
+
+    public boolean isWaiting() {
+        return isWaiting;
+    }
+
+    public void setWaiting(boolean waiting) {
+        isWaiting = waiting;
     }
 }

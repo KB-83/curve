@@ -4,18 +4,21 @@ import server.model.Game;
 import server.util.Loop;
 
 public class GameController implements Runnable{
-    //todo:improve  its null just used in game loop
     private ServerController serverController;
     private Thread gameThread;
     private int FPS;
     private boolean running;
     private int tryFps;
     private boolean isPaused;
-    private Client client1;
-    private Client client2;
     private Game game;
     private Loop loop;
-    private void startGame(){
+
+    public GameController(Game game,ServerController serverController) {
+        this.game = game;
+        this.serverController = serverController;
+    }
+
+    public void startGame(){
         if(gameThread == null) {
             gameThread = new Thread(this);
         }
@@ -52,7 +55,7 @@ public class GameController implements Runnable{
 
 
                 updateGame();
-                serverController.sendGameState(client1,client2,game);
+//                serverController.sendGameState(client1,client2,game);
 
 
                 lastTime = System.nanoTime();
@@ -64,9 +67,9 @@ public class GameController implements Runnable{
         }
     }
     private void updateGame() {
-        client1.getPlayer().getSnake().setX((int) (client1.getPlayer().getSnake().getX() + client1.getPlayer().getSnake().getvX()));
-        client1.getPlayer().getSnake().setY((int) (client1.getPlayer().getSnake().getY() + client1.getPlayer().getSnake().getvY()));
-        client2.getPlayer().getSnake().setX((int) (client1.getPlayer().getSnake().getX() + client1.getPlayer().getSnake().getvX()));
-        client2.getPlayer().getSnake().setY((int) (client1.getPlayer().getSnake().getY() + client1.getPlayer().getSnake().getvY()));
+        game.getPlayer1().getSnake().setX((int) (game.getPlayer1().getSnake().getX() + game.getPlayer1().getSnake().getvX()));
+        game.getPlayer1().getSnake().setY((int) (game.getPlayer1().getSnake().getY() + game.getPlayer1().getSnake().getvY()));
+        game.getPlayer2().getSnake().setX((int) (game.getPlayer2().getSnake().getX() + game.getPlayer2().getSnake().getvX()));
+        game.getPlayer2().getSnake().setY((int) (game.getPlayer2().getSnake().getY() + game.getPlayer2().getSnake().getvY()));
     }
 }

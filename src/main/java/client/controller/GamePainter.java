@@ -17,8 +17,8 @@ public class GamePainter {
         }
     }
     private void drawSnake(Snake snake, Graphics2D g2) {
-        if (snake.getSnakeBody().getSnakeBodyParts() != null) {
-            for (SnakeBodyPart snakeBodyPart : snake.getSnakeBody().getSnakeBodyParts()) {
+        if (snake.getSnakeBody().getSnakeBodyPartArray() != null) {
+            for (SnakeBodyPart snakeBodyPart : snake.getSnakeBody().getSnakeBodyPartArray()) {
                 g2.setColor(Color.YELLOW);
                 g2.translate(snakeBodyPart.getX(), snakeBodyPart.getY());
                 g2.rotate(snakeBodyPart.getArc());

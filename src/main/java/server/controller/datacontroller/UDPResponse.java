@@ -3,6 +3,7 @@ package server.controller.datacontroller;
 public class UDPResponse {
     //0 answare of logim
     //1 playersArrayList
+    //2 game started  masage = ?
     private int type;
     private String massage;
 

@@ -29,7 +29,7 @@ public class SearchPanel extends CurveCustomPanel{
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardPanel.getCardLayout().show(cardPanel,"GAME");
+                getClientController().startRequest(themeComboBox.getItemAt(themeComboBox.getSelectedIndex()));
             }
         });
         JLabel themeLabel = new JLabel("Choose a theme:");

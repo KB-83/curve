@@ -1,10 +1,12 @@
 package client;
 
+import client.models.Game;
 import client.view.CurveCustomFrame;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import server.controller.datacontroller.UDPResponse;
+
 
 import java.io.IOException;
 import java.net.*;
@@ -57,14 +59,13 @@ public class ClientController {
         if (response.equals("TRUE")) {
             setUserName(curveCustomFrame.cardPanel.getLoginPanel().getUsernameField().getText());
             curveCustomFrame.cardPanel.getCardLayout().show(curveCustomFrame.cardPanel, "SEARCH");
-//            ccardPanel.getSearchPanel().setPlayers(getClientController().getOpponentsNames());
             return;
         }
         System.out.println(response);
     }
-    public void startRequest(String userName,String opponentName){
-        UDPRequest joinRequest = new UDPRequest(userName,1,opponentName);
-
+    public void startRequest(String opponentName){
+        UDPRequest startRequest = new UDPRequest(userName,1,opponentName);
+        sendUDPData(startRequest);
     }
     private String receiveUDPData(){
         byte[] receiveData = new byte[60000];
@@ -106,32 +107,35 @@ public class ClientController {
                 break;
             case 1:
                 try {
-                    System.out.println(109+" : "+ udpResponse.getMassage());
                     curveCustomFrame.cardPanel.getSearchPanel().setPlayers(objectMapper.readValue
                             (udpResponse.getMassage(), new TypeReference<ArrayList<String>>() {}));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
                 break;
+            case 2:
+                Game game;
+                try {
+                    game = objectMapper.readValue(udpResponse.getMassage(),Game.class);
+                } catch (JsonMappingException e) {
+                    throw new RuntimeException(e);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                startGame(game);
+                break;
         }
+    }
+    private void startGame(Game game){
+        curveCustomFrame.cardPanel.getCardLayout().show(curveCustomFrame.cardPanel, "GAME");
     }
     private String receiveTCPData(){return "";}
     private void sendTCPData(Request request){}
     private void handleTCPData(String s){}
-//    public ArrayList<String> getOpponentsNames(){
-//        UDPRequest clientsRequest = new UDPRequest(userName,2,null);
-//        sendUDPData(clientsRequest);
-//        ArrayList<String> clientsName = null;
-//        try {
-//            clientsName = objectMapper.readValue(receiveUDPData(), new TypeReference<ArrayList<String>>() {});
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return clientsName;
-//    }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
 
 }

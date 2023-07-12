@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import server.controller.datacontroller.UDPRequest;
 import server.controller.datacontroller.UDPResponse;
-import server.model.Client;
-import server.model.Game;
-import server.model.TCPServer;
-import server.model.UDPServer;
+import server.model.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -60,7 +57,6 @@ public class ServerController {
     }
     private void controlUDPRequest(UDPRequest udpRequest,DatagramPacket receivePacket) {
         int requestNum = udpRequest.getRequestNum();
-        //todo : you can return response as json
         switch (requestNum){
             case 0:
                 if (clients.size() == 20) {
@@ -87,12 +83,14 @@ public class ServerController {
                 }
                 break;
             case 1 :
-                for (int i = 0 ; i < clients.size() ; i++) {
-                    if (clients.get(i).getUserName().equals(udpRequest.getUserName())){
-                        clients.get(i).getClientController().handleUDPRequest(udpRequest);
+//                sinchronize//{
+                for (int i = 0; i < clients.size(); i++) {
+                    if (clients.get(i).getUserName().equals(udpRequest.getUserName())) {
+                        startGame(udpRequest);
                         break;
                     }
                 }
+            //}
                 break;
         }
 
@@ -110,16 +108,46 @@ public class ServerController {
     private void sendClients(DatagramSocket serverSocket,InetAddress address, int port,String userName) {
         ArrayList<String> clientsName = new ArrayList<>();
         for (int i = 0 ; i < clients.size(); i++) {
-            if (!clients.get(i).getUserName().equals(userName)) {
+            if (!clients.get(i).getUserName().equals(userName) && clients.get(i).isWaiting()) {
                 clientsName.add(clients.get(i).getUserName());
             }
         }
         try {
             UDPResponse udpResponse = new UDPResponse(1,objectMapper.writeValueAsString(clientsName));
             sendUdpMessage(serverSocket,udpResponse,address,port);
-            System.out.println("124");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    private synchronized void startGame(UDPRequest udpRequest) {
+//        start the game
+        Player player1 = new Player(udpRequest.getUserName());
+        Player player2 = new Player(udpRequest.getOpponentName());
+        Game game = new Game(player1,player2);
+        GameController gameController = new GameController(game,this);
+        UDPResponse udpResponse = null;
+        try {
+            udpResponse = new UDPResponse(2,objectMapper.writeValueAsString(game));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 0; i < clients.size(); i++){
+            if (clients.get(i).getUserName().equals(udpRequest.getUserName())){
+                clients.get(i).setWaiting(false);
+                sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,clients.get(i).
+                        getInetAddress(),clients.get(i).getPort());
+            }
+            else if (clients.get(i).getUserName().equals(udpRequest.getOpponentName())) {
+                clients.get(i).setWaiting(false);
+                sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,clients.get(i).
+                        getInetAddress(),clients.get(i).getPort());
+            }
+        }
+        for (Client client :clients){
+            sendClients(udpServer.getUdpServerSocket(),client.getInetAddress(),client.getPort(),client.getUserName());
+        }
+        gameController.startGame();
+        //send game started data
+        // start GameController and sen it to both clients
     }
 }

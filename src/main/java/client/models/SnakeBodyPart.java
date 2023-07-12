@@ -3,6 +3,8 @@ package client.models;
 public class SnakeBodyPart {
     private int x,y;
     private int arc;
+    public SnakeBodyPart() {
+    }
 
     public int getX() {
         return x;

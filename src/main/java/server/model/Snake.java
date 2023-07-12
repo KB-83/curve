@@ -1,9 +1,13 @@
 package server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Snake {
     private SnakeHead snakeHead;
     private SnakeBody snakeBody;
+    @JsonIgnore
     private double vX,vY;
+    @JsonIgnore
     private int x,y;
 
     public SnakeHead getSnakeHead() {

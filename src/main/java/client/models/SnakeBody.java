@@ -1,13 +1,18 @@
 package client.models;
 
-public class SnakeBody {
-    private SnakeBodyPart[] snakeBodyParts;
+import java.util.ArrayList;
 
-    public SnakeBodyPart[] getSnakeBodyParts() {
-        return snakeBodyParts;
+public class SnakeBody {
+    private ArrayList<SnakeBodyPart> snakeBodyPartArray;
+
+    public SnakeBody() {
     }
 
-    public void setSnakeBodyParts(SnakeBodyPart[] snakeBodyParts) {
-        this.snakeBodyParts = snakeBodyParts;
+    public ArrayList<SnakeBodyPart> getSnakeBodyPartArray() {
+        return snakeBodyPartArray;
+    }
+
+    public void setSnakeBodyPartArray(ArrayList<SnakeBodyPart> snakeBodyPartArray) {
+        this.snakeBodyPartArray = snakeBodyPartArray;
     }
 }
