@@ -183,6 +183,10 @@ public class ServerController {
 //        start the game
         Player player1 = new Player(udpRequest.getUserName());
         Player player2 = new Player(udpRequest.getOpponentName());
+
+        client1.setPlayer(player1);
+        client2.setPlayer(player2);
+
         Game game = new Game(player1,player2);
         GameController gameController = new GameController(game,this,60,client1,client2);
         UDPResponse udpResponse = null;

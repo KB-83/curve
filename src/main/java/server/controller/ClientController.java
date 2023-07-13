@@ -2,6 +2,7 @@ package server.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import server.Main;
 import server.controller.datacontroller.TCPRequest;
 import server.controller.datacontroller.UDPRequest;
 import server.model.*;
@@ -66,6 +67,19 @@ public class ClientController extends Thread{
                 break;
             case 1:
                 System.out.println(tcpRequest.getMassage());
+                snakeMoveRequest(tcpRequest.getMassage());
+                break;
+        }
+    }
+    private void snakeMoveRequest(String direction){
+        int angle = 10;
+        Snake snake = client.getPlayer().getSnake();
+        switch (direction) {
+            case "RIGHT":
+                snake.setAngle(snake.getAngle() + angle);
+                break;
+            case "LEFT":
+                snake.setAngle(snake.getAngle() - angle);
                 break;
         }
     }
