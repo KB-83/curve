@@ -3,14 +3,14 @@ package client;
 public class TCPRequest extends Request{
     // 0 : send Name
     private int type;
-    private String username;
+    private String massage;
 
     public TCPRequest() {
     }
 
-    public TCPRequest(int type, String username) {
+    public TCPRequest(int type, String massage) {
         this.type = type;
-        this.username = username;
+        this.massage = massage;
     }
 
     public int getType() {
@@ -21,11 +21,11 @@ public class TCPRequest extends Request{
         this.type = type;
     }
 
-    public String getUsername() {
-        return username;
+    public String getMassage() {
+        return massage;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMassage(String massage) {
+        this.massage = massage;
     }
 }

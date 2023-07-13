@@ -1,8 +1,10 @@
 package client;
 
+import client.listener.MovementListener;
 import client.models.Game;
 import client.models.GameController;
 import client.view.CurveCustomFrame;
+import client.view.GamePanel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -137,7 +139,10 @@ public class ClientController {
     private void startGame(Game game){
         curruntGame = game;
         curveCustomFrame.cardPanel.getCardLayout().show(curveCustomFrame.cardPanel, "GAME");
-        GameController gameController = new GameController(curruntGame,curveCustomFrame.cardPanel.getGamePanel());
+        GamePanel gamePanel = curveCustomFrame.cardPanel.getGamePanel();
+        gamePanel.setKeyListener(new MovementListener(this));
+        gamePanel.requestFocus();
+        GameController gameController = new GameController(curruntGame,gamePanel);
         gameController.startGame();
     }
     private TCPResponse receiveTCPData(){
@@ -153,11 +158,14 @@ public class ClientController {
 
         return tcpResponse;
     }
+    public void movementRequest(String direction) {
+        TCPRequest tcpRequest = new TCPRequest(1,direction);
+        sendTCPData(tcpRequest);
+    }
     private void sendTCPData(TCPRequest tcpRequest){
         try {
             String json = objectMapper.writeValueAsString(tcpRequest);
-            tcpWriter.write(json);
-            tcpWriter.flush();
+            tcpWriter.println(json);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

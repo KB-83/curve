@@ -84,9 +84,9 @@ public class ServerController {
                 }
                 Client client = new Client(receivePacket.getAddress(), receivePacket.getPort(), udpRequest.getUserName());
                 //todo : haminja socket ham begir
-                ClientController clientController = new ClientController(tcpServer, udpServer, client);
-                client.setClientController(clientController);
-                clientController.control();
+//                ClientController clientController = new ClientController(tcpServer, objectMapper,, client);
+//                client.setClientController(clientController);
+//                clientController.control();
                 clients.add(client);
                 UDPResponse udpResponse = new UDPResponse(0,"TRUE");
                 sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,receivePacket.getAddress(),receivePacket.getPort());
@@ -117,6 +117,8 @@ public class ServerController {
             for (Client client : clients) {
                 if (client.getUserName().equals(username)) {
                     client.setSocket(socket);
+                    ClientController clientController = new ClientController(tcpServer,objectMapper,bufferedReader,client);
+                    clientController.start();
                 }
             }
         } catch (IOException e) {

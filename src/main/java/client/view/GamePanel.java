@@ -6,6 +6,7 @@ import client.models.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 
 public class GamePanel extends CurveCustomPanel {
     private Game game;
@@ -27,5 +28,10 @@ public class GamePanel extends CurveCustomPanel {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+    public void setKeyListener(KeyListener keyListener) {
+        if (getKeyListeners().length == 0) {
+            addKeyListener(keyListener);
+        }
     }
 }
