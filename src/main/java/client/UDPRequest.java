@@ -1,5 +1,7 @@
 package client;
 
+import java.net.Socket;
+
 public class UDPRequest extends Request{
     private String userName;
     //0 = join
@@ -41,5 +43,6 @@ public class UDPRequest extends Request{
     public void setOpponentName(String opponentName) {
         this.opponentName = opponentName;
     }
+
 }
 

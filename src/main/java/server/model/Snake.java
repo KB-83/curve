@@ -8,7 +8,12 @@ public class Snake {
     @JsonIgnore
     private double vX,vY;
     @JsonIgnore
-    private int x,y;
+    private SnakeBodyPart lastSnakeBodyPart;
+
+    public Snake() {
+        snakeHead = new SnakeHead();
+        snakeBody = new SnakeBody();
+    }
 
     public SnakeHead getSnakeHead() {
         return snakeHead;
@@ -41,20 +46,11 @@ public class Snake {
     public void setvY(double vY) {
         this.vY = vY;
     }
-
-    public int getX() {
-        return x;
+    public SnakeBodyPart getLastSnakeBodyPart() {
+        return lastSnakeBodyPart;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public void setLastSnakeBodyPart(SnakeBodyPart lastSnakeBodyPart) {
+        this.lastSnakeBodyPart = lastSnakeBodyPart;
     }
 }

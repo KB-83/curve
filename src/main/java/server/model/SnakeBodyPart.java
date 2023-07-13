@@ -1,8 +1,11 @@
 package server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class SnakeBodyPart {
     private int x,y;
-    private int arc;
+    @JsonIgnore
+    private static final int R = 7;
 
     public SnakeBodyPart() {
     }
@@ -23,11 +26,7 @@ public class SnakeBodyPart {
         this.y = y;
     }
 
-    public int getArc() {
-        return arc;
-    }
-
-    public void setArc(int arc) {
-        this.arc = arc;
+    public static int getR() {
+        return R;
     }
 }

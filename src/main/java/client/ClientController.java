@@ -1,6 +1,7 @@
 package client;
 
 import client.models.Game;
+import client.models.GameController;
 import client.view.CurveCustomFrame;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -8,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
@@ -23,8 +24,15 @@ public class ClientController {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String userName ;
     private CurveCustomFrame curveCustomFrame;
+    private BufferedReader tcpReader;
+    private Game curruntGame;
+    private PrintWriter tcpWriter;
+
     public ClientController() throws IOException {
         clientTCPSocket = new Socket("localhost",SERVER_PORT);
+        clientTCPSocket.setTcpNoDelay(true);
+        tcpReader = new BufferedReader(new InputStreamReader(clientTCPSocket.getInputStream()));
+        tcpWriter = new PrintWriter(clientTCPSocket.getOutputStream(),true);
         clientUDPSocket = new DatagramSocket();
         curveCustomFrame = new CurveCustomFrame(this);
         run();
@@ -43,7 +51,7 @@ public class ClientController {
             @Override
             public void run() {
                 while (true) {
-                    String response = receiveTCPData();
+                    TCPResponse response = receiveTCPData();
                     handleTCPData(response);
                 }
             }
@@ -58,6 +66,7 @@ public class ClientController {
     private void joinResponse(String response){
         if (response.equals("TRUE")) {
             setUserName(curveCustomFrame.cardPanel.getLoginPanel().getUsernameField().getText());
+                tcpWriter.println(userName);
             curveCustomFrame.cardPanel.getCardLayout().show(curveCustomFrame.cardPanel, "SEARCH");
             return;
         }
@@ -93,7 +102,6 @@ public class ClientController {
         }
     }
 
-    //todo : make s response
     private void handleUDPData(String s){
         UDPResponse udpResponse;
         try {
@@ -127,11 +135,50 @@ public class ClientController {
         }
     }
     private void startGame(Game game){
+        curruntGame = game;
         curveCustomFrame.cardPanel.getCardLayout().show(curveCustomFrame.cardPanel, "GAME");
+        GameController gameController = new GameController(curruntGame,curveCustomFrame.cardPanel.getGamePanel());
+        gameController.startGame();
     }
-    private String receiveTCPData(){return "";}
-    private void sendTCPData(Request request){}
-    private void handleTCPData(String s){}
+    private TCPResponse receiveTCPData(){
+        String jsonResponse = null;
+        TCPResponse tcpResponse = null;
+        try {
+            jsonResponse = tcpReader.readLine();
+            tcpResponse = objectMapper.readValue(jsonResponse, TCPResponse.class);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tcpResponse;
+    }
+    private void sendTCPData(TCPRequest tcpRequest){
+        try {
+            String json = objectMapper.writeValueAsString(tcpRequest);
+            tcpWriter.write(json);
+            tcpWriter.flush();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void handleTCPData(TCPResponse tcpResponse){
+        switch (tcpResponse.getMode()) {
+            case 0 :
+                try {
+                    curruntGame = objectMapper.readValue(tcpResponse.getMassage(), Game.class);
+                    curveCustomFrame.cardPanel.getGamePanel().setGame(curruntGame);
+//                    System.out.println(curruntGame+"191");
+                } catch (JsonMappingException e) {
+                    throw new RuntimeException(e);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+        }
+    }
 
     public void setUserName(String userName) {
         this.userName = userName;

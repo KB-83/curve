@@ -1,6 +1,9 @@
 package client.util;
 
 
+import client.models.Game;
+import client.view.GamePanel;
+
 public class Loop implements Runnable{
     //    private GameState gameState;// to update
 //    private GamePanel gamePanel;// to repaint
@@ -8,12 +11,13 @@ public class Loop implements Runnable{
     private int FPS;
     private boolean running;
     private boolean isPaused;
+    private GamePanel gamePanel;
     //    this int is to test app rendering
     private int tryFps;
 
-    public Loop(int FPS) {
-//        this.gamePanel = gamePanel;
-//        this.gameState = gameState;
+    public Loop(int FPS, Game game, GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
+        gamePanel.setGame(game);
         this.FPS = FPS;
     }
 
@@ -51,9 +55,8 @@ public class Loop implements Runnable{
             delta = (currentTime - lastTime) / drawInterval ;
             if(delta >= 1){
                 tryFps++;
-//                gameState.getGameStateController().update();
-//                gamePanel.setGuiGameState(GuiGameCreator.createGameState(gameState,gamePanel.getGuiGameState()));
-//                gamePanel.repaint();
+                gamePanel.repaint();
+                //todo : game would be update by tcp network connection
                 lastTime = System.nanoTime();
             }
             if (System.nanoTime()-startfPS >= 1000000000){

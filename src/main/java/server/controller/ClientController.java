@@ -34,7 +34,7 @@ public class ClientController implements Runnable{
             throw new RuntimeException(e);
         }
     }
-    public void handleUDPRequest(UDPRequest udpRequest) {
+    public void handleTCPRequest(UDPRequest udpRequest) {
         if (udpRequest.getRequestNum() == 1){
 //            start the game
             Player player1 = new Player(udpRequest.getUserName());

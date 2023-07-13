@@ -5,17 +5,29 @@ import server.util.Loop;
 
 public class GameController implements Runnable{
     private ServerController serverController;
+    private GameDeathController gameDeathController;
+    private GameGiftController gameGiftController;
+    private GameSnakeBodyController gameSnakeBodyController;
     private Thread gameThread;
     private int FPS;
     private boolean running;
     private int tryFps;
     private boolean isPaused;
     private Game game;
+    private Client client1;
+    private Client client2;
     private Loop loop;
 
-    public GameController(Game game,ServerController serverController) {
+    public GameController(Game game,ServerController serverController,int FPS,Client client1,Client client2) {
+        this.client1 = client1;
+        this.client2 = client2;
+        this.FPS = FPS;
         this.game = game;
         this.serverController = serverController;
+        gameDeathController = new GameDeathController(game);
+        gameGiftController = new GameGiftController(game);
+        gameSnakeBodyController = new GameSnakeBodyController(game);
+
     }
 
     public void startGame(){
@@ -55,7 +67,7 @@ public class GameController implements Runnable{
 
 
                 updateGame();
-//                serverController.sendGameState(client1,client2,game);
+                serverController.sendGameState(client1,client2,game);
 
 
                 lastTime = System.nanoTime();
@@ -67,9 +79,16 @@ public class GameController implements Runnable{
         }
     }
     private void updateGame() {
-        game.getPlayer1().getSnake().setX((int) (game.getPlayer1().getSnake().getX() + game.getPlayer1().getSnake().getvX()));
-        game.getPlayer1().getSnake().setY((int) (game.getPlayer1().getSnake().getY() + game.getPlayer1().getSnake().getvY()));
-        game.getPlayer2().getSnake().setX((int) (game.getPlayer2().getSnake().getX() + game.getPlayer2().getSnake().getvX()));
-        game.getPlayer2().getSnake().setY((int) (game.getPlayer2().getSnake().getY() + game.getPlayer2().getSnake().getvY()));
+        gameSnakeBodyController.addBody();
+        gameDeathController.checkPlayersDeath();
+        gameGiftController.handleGifts();
+        game.getPlayer1().getSnake().setvY(1);
+        game.getPlayer2().getSnake().setvX(1);
+        game.getPlayer2().getSnake().getSnakeHead().setY(100);
+        game.getPlayer1().getSnake().getSnakeHead().setX(30);
+        game.getPlayer1().getSnake().getSnakeHead().setX((int) (game.getPlayer1().getSnake().getSnakeHead().getX() + game.getPlayer1().getSnake().getvX()));
+        game.getPlayer1().getSnake().getSnakeHead().setY((int) (game.getPlayer1().getSnake().getSnakeHead().getY() + game.getPlayer1().getSnake().getvY()));
+        game.getPlayer2().getSnake().getSnakeHead().setX((int) (game.getPlayer2().getSnake().getSnakeHead().getX() + game.getPlayer2().getSnake().getvX()));
+        game.getPlayer2().getSnake().getSnakeHead().setY((int) (game.getPlayer2().getSnake().getSnakeHead().getY() + game.getPlayer2().getSnake().getvY()));
     }
 }

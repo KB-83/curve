@@ -20,4 +20,12 @@ public class GamePanel extends CurveCustomPanel {
         Graphics2D graphics2D = (Graphics2D) g;
         gamePainter.paint(game,graphics2D);
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

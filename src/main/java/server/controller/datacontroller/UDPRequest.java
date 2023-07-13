@@ -1,5 +1,7 @@
 package server.controller.datacontroller;
 
+import java.net.Socket;
+
 public class UDPRequest {
     private String userName;
     //0 = join
@@ -34,4 +36,5 @@ public class UDPRequest {
     public void setOpponentName(String opponentName) {
         this.opponentName = opponentName;
     }
+
 }
