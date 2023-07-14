@@ -1,6 +1,8 @@
 package client.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Game {
     private Player player1;
     private Player player2;

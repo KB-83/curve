@@ -81,6 +81,7 @@ public class GameController implements Runnable{
         gameSnakeBodyController.addBody();
         gameDeathController.checkPlayersDeath();
         gameGiftController.handleGifts();
+        gameGiftController.createGift();
         double v = 4;
         if (i == 4) {
             double vX = Math.cos(Math.toRadians(game.getPlayer1().getSnake().getAngle())) * v;
