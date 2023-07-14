@@ -17,13 +17,13 @@ public class GameController implements Runnable{
     private Client client1;
     private Client client2;
     int i = 0;
-    int test = 0;
 
     public GameController(Game game,ServerController serverController,int FPS,Client client1,Client client2) {
         this.client1 = client1;
         this.client2 = client2;
         this.FPS = FPS;
         this.game = game;
+        game.setGameController(this);
         this.serverController = serverController;
         gameDeathController = new GameDeathController(game);
         gameGiftController = new GameGiftController(game);
@@ -39,7 +39,9 @@ public class GameController implements Runnable{
         gameThread.start();
     }
 
-    public void kill() {
+    public void kill(String winnerName,String looserName) {
+        client1.getClientController().endGame(winnerName,looserName);
+        client2.getClientController().endGame(winnerName,looserName);
         gameThread.stop();
         running = false;
         gameThread = null;

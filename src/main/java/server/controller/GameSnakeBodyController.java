@@ -25,7 +25,12 @@ public class GameSnakeBodyController {
         else {
             snakeBodyPart1 = new SnakeBodyPart();
             snakeBodyPart1.setX(snake.getSnakeHead().getX());
-            snakeBodyPart1.setY(snake.getSnakeHead().getY()+SnakeBodyPart.getR()+ SnakeHead.getR());
+            if (snake.getAngle()>0 && snake.getAngle() <180) {
+                snakeBodyPart1.setY(snake.getSnakeHead().getY() - SnakeBodyPart.getR() - SnakeHead.getR());
+            }
+            else {
+                snakeBodyPart1.setY(snake.getSnakeHead().getY() + SnakeBodyPart.getR() + SnakeHead.getR());
+            }
         }
         if (snakeBodyPart1 != null) {
             snake.getSnakeBody().getSnakeBodyPartArray().add(snakeBodyPart1);

@@ -2,6 +2,7 @@ package server.controller.datacontroller;
 
 public class TCPResponse {
     // 0 : game update
+    //1 : game ended massage = winner
     private int mode;
     private String massage;
 

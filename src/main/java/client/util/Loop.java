@@ -47,16 +47,14 @@ public class Loop implements Runnable{
         long startfPS = System.nanoTime();
         long delta = 0;
         long currentTime;
-        while (running){
+        while (running && gamePanel.getGame() != null && gamePanel.getGame().isRunnig() ){
             // sorry but it is the best i can design fo pause mechanisem :(
-            //todo : improve pause mechanisem
 //            while (gameState.isPaused()){}
             currentTime = System.nanoTime();
             delta = (currentTime - lastTime) / drawInterval ;
             if(delta >= 1){
                 tryFps++;
                 gamePanel.repaint();
-                //todo : game would be update by tcp network connection
                 lastTime = System.nanoTime();
             }
             if (System.nanoTime()-startfPS >= 1000000000){

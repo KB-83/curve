@@ -1,14 +1,18 @@
 package client.model;
 
 
+import client.controller.GameController;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Game {
     private Player player1;
     private Player player2;
     private Gift activatedGift;
+    @JsonIgnore
+    private boolean isRunnig;
 
     public Game() {
+        isRunnig = true;
     }
 
     public Player getPlayer1() {
@@ -34,4 +38,13 @@ public class Game {
     public void setActivatedGift(Gift activatedGift) {
         this.activatedGift = activatedGift;
     }
+
+    public boolean isRunnig() {
+        return isRunnig;
+    }
+
+    public void setRunnig(boolean runnig) {
+        isRunnig = runnig;
+    }
+
 }

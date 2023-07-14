@@ -151,7 +151,7 @@ public class ServerController {
             for (Client client : clients) {
                 if (client.getUserName().equals(username)) {
                     client.setSocket(socket);
-                    ClientController clientController = new ClientController(tcpServer,objectMapper,bufferedReader,client);
+                    ClientController clientController = new ClientController(objectMapper,bufferedReader,client,this);
                     client.setClientController(clientController);
                     clientController.start();
                 }
@@ -184,7 +184,7 @@ public class ServerController {
             throw new RuntimeException(e);
         }
     }
-    private void sendClients(DatagramSocket serverSocket,InetAddress address, int port,String userName) {
+    public void sendClients(DatagramSocket serverSocket,InetAddress address, int port,String userName) {
         ArrayList<String> clientsName = new ArrayList<>();
         for (int i = 0 ; i < clients.size(); i++) {
             if (!clients.get(i).getUserName().equals(userName) && clients.get(i).isInWaitingRoom()) {
@@ -238,4 +238,14 @@ public class ServerController {
         //send game started data
         // start GameController and sen it to both clients
     }
+
+    public ArrayList<Client> getClients() {
+        return clients;
+    }
+
+    public UDPServer getUdpServer() {
+        return udpServer;
+    }
+
 }
+

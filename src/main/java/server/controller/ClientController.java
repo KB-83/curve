@@ -10,16 +10,16 @@ import server.model.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.util.ArrayList;
 
 public class ClientController extends Thread{
-    private UDPServer udpServer;
-    private TCPServer tcpServer;
     private Client client;
     private BufferedReader reader;
     private ObjectMapper objectMapper;
+    private ServerController serverController;
 
-    public ClientController(TCPServer tcpServer, ObjectMapper objectMapper,BufferedReader reader, Client client) {
-        this.tcpServer = tcpServer;
+    public ClientController(ObjectMapper objectMapper,BufferedReader reader, Client client,ServerController serverController) {
+        this.serverController = serverController;
         this.reader = reader;
         this.client = client;
         this.objectMapper = objectMapper;
@@ -34,22 +34,16 @@ public class ClientController extends Thread{
     public void control() {
 
     }
-    private void waitForOpponent() {
-        byte[] receiveData = new byte[1024];
-        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        try {
-            udpServer.getUdpServerSocket().receive(receivePacket);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
     private void receiveTCPConnection() {
         try {
             String json = reader.readLine();
             TCPRequest tcpRequest = objectMapper.readValue(json,TCPRequest.class);
             handleTCPRequest(tcpRequest);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e){
+            System.out.println("client left");
+        }
+        catch (IOException e) {
+            throw new RuntimeException();
         }
     }
     private void handleTCPRequest(TCPRequest tcpRequest) {
@@ -83,5 +77,25 @@ public class ClientController extends Thread{
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void endGame(String winner,String looser) {
+        Client looserClient = findLooser(looser);
+        looserClient.setInWaitingRoom(true);
+        client.setInWaitingRoom(true);
+        serverController.sendClients(serverController.getUdpServer().getUdpServerSocket(),looserClient.getInetAddress(),
+                looserClient.getPort(),looser);
+        serverController.sendClients(serverController.getUdpServer().getUdpServerSocket(),client.getInetAddress(),
+                client.getPort(),winner);
+        TCPResponse tcpResponse = new TCPResponse(1,winner);
+        sendTCPData(tcpResponse);
+    }
+    private Client findLooser(String looser) {
+        ArrayList<Client> clients = serverController.getClients();
+        for (Client client : clients) {
+            if (client.getUserName().equals(looser)) {
+                return client;
+            }
+        }
+        return null;
     }
 }

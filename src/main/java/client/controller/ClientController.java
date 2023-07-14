@@ -192,6 +192,12 @@ public class ClientController {
                     throw new RuntimeException(e);
                 }
                 break;
+            case 1 :
+                curruntGame.setRunnig(false);
+                curveCustomFrame.cardPanel.getGamePanel().setGame(null);
+                curveCustomFrame.cardPanel.getCardLayout().show(curveCustomFrame.cardPanel, "SEARCH");
+                System.out.println("Winner is: "+tcpResponse.getMassage());
+                break;
         }
     }
 

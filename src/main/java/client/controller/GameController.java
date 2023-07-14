@@ -17,4 +17,8 @@ public class GameController {
     public void startGame() {
         loop.start();
     }
+
+    public Loop getLoop() {
+        return loop;
+    }
 }

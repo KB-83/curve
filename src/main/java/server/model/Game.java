@@ -1,15 +1,14 @@
 package server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import server.controller.GameController;
 
 public class Game {
     private Player player1;
     private Player player2;
     private Gift activatedGift;
     @JsonIgnore
-//    private client.model.Gift playerOneGift;
-//    @JsonIgnore
-//    private client.model.Gift playerTwoGift;
+    private GameController gameController;
 
 
     public Game(Player player1, Player player2) {
@@ -59,4 +58,12 @@ public class Game {
 //    public void setPlayerTwoGift(client.model.Gift playerTwoGift) {
 //        this.playerTwoGift = playerTwoGift;
 //    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
 }
