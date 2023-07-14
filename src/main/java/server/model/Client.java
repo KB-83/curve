@@ -1,6 +1,5 @@
 package server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import server.controller.ClientController;
 
 import java.io.IOException;

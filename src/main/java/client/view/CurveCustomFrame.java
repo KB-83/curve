@@ -3,9 +3,10 @@ package client.view;
 import client.controller.ClientController;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CurveCustomFrame extends JFrame {
-//    GraphicManager gM;
     public CardPanel cardPanel;
     private ClientController clientController;
     private RequestFrame requestFrame;
@@ -22,6 +23,12 @@ public class CurveCustomFrame extends JFrame {
 
         this.revalidate();
         this.setVisible(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                clientController.exitRequest();
+            }
+        });
     }
 
     public RequestFrame getRequestFrame() {

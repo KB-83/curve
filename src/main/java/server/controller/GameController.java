@@ -60,9 +60,6 @@ public class GameController implements Runnable{
         long delta = 0;
         long currentTime;
         while (running){
-            // sorry but it is the best i can design fo pause mechanisem :(
-            //todo : improve pause mechanisem
-            while (isPaused){}
             currentTime = System.nanoTime();
             delta = (currentTime - lastTime) / drawInterval ;
             if(delta >= 1){

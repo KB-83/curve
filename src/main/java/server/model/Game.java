@@ -43,21 +43,6 @@ public class Game {
         this.activatedGift = activatedGift;
     }
 
-//    public client.model.Gift getPlayerOneGift() {
-//        return playerOneGift;
-//    }
-//
-//    public void setPlayerOneGift(client.model.Gift playerOneGift) {
-//        this.playerOneGift = playerOneGift;
-//    }
-//
-//    public client.model.Gift getPlayerTwoGift() {
-//        return playerTwoGift;
-//    }
-//
-//    public void setPlayerTwoGift(client.model.Gift playerTwoGift) {
-//        this.playerTwoGift = playerTwoGift;
-//    }
 
     public GameController getGameController() {
         return gameController;

@@ -1,7 +1,4 @@
 package client.model;
-
-
-import client.controller.GameController;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Game {

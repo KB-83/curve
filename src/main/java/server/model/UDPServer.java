@@ -1,8 +1,6 @@
 package server.model;
 
 import java.net.DatagramSocket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UDPServer {
     private DatagramSocket udpServerSocket;

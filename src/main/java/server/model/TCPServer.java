@@ -1,7 +1,6 @@
 package server.model;
 
 import java.net.ServerSocket;
-import java.util.ArrayList;
 
 public class TCPServer {
     private ServerSocket tcpServerSocket;

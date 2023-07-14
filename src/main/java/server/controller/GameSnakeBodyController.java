@@ -4,7 +4,6 @@ import server.model.*;
 
 public class GameSnakeBodyController {
     Game game;
-    int test = 0;
 
 
     public GameSnakeBodyController(Game game) {

@@ -170,13 +170,15 @@ public class ClientController {
         TCPRequest tcpRequest = new TCPRequest(1,direction);
         sendTCPData(tcpRequest);
     }
+    public void exitRequest(){
+        TCPRequest tcpRequest = new TCPRequest(2,userName);
+        sendTCPData(tcpRequest);
+    }
     private void sendTCPData(TCPRequest tcpRequest){
         try {
             String json = objectMapper.writeValueAsString(tcpRequest);
             tcpWriter.println(json);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

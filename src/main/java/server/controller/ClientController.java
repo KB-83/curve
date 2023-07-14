@@ -9,7 +9,6 @@ import server.model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 public class ClientController extends Thread{
@@ -17,17 +16,19 @@ public class ClientController extends Thread{
     private BufferedReader reader;
     private ObjectMapper objectMapper;
     private ServerController serverController;
+    private boolean isInGame;
 
     public ClientController(ObjectMapper objectMapper,BufferedReader reader, Client client,ServerController serverController) {
         this.serverController = serverController;
         this.reader = reader;
         this.client = client;
         this.objectMapper = objectMapper;
+        isInGame = true;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (isInGame) {
             receiveTCPConnection();
         }
     }
@@ -40,10 +41,11 @@ public class ClientController extends Thread{
             TCPRequest tcpRequest = objectMapper.readValue(json,TCPRequest.class);
             handleTCPRequest(tcpRequest);
         } catch (IllegalArgumentException e){
-            System.out.println("client left");
+            this.stop();
         }
         catch (IOException e) {
-            throw new RuntimeException();
+            isInGame = false;
+            System.out.println("receiving exception line 48 server.controller.ClientController");
         }
     }
     private void handleTCPRequest(TCPRequest tcpRequest) {
@@ -52,6 +54,9 @@ public class ClientController extends Thread{
                 break;
             case 1:
                 snakeMoveRequest(tcpRequest.getMassage());
+                break;
+            case 2:
+                serverController.removeClient(tcpRequest.getMassage());
                 break;
         }
     }

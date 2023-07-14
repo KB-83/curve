@@ -4,7 +4,6 @@ package client.view;
 import client.controller.ClientController;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 

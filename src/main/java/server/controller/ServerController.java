@@ -151,7 +151,8 @@ public class ServerController {
             for (Client client : clients) {
                 if (client.getUserName().equals(username)) {
                     client.setSocket(socket);
-                    ClientController clientController = new ClientController(objectMapper,bufferedReader,client,this);
+                    ClientController clientController = new
+                            ClientController(objectMapper,bufferedReader,client,this);
                     client.setClientController(clientController);
                     clientController.start();
                 }
@@ -200,6 +201,7 @@ public class ServerController {
     }
     private synchronized void startGame(Client client1,Client client2) {
         Player player1 = new Player(client1.getUserName());
+        // i can load theme as a config but this project is to small for that
         player1.getSnake().setAngle(90);
         player1.getSnake().getSnakeHead().setX(400);
         player1.getSnake().getSnakeHead().setY(450);
@@ -245,6 +247,19 @@ public class ServerController {
 
     public UDPServer getUdpServer() {
         return udpServer;
+    }
+    public void removeClient(String userName){
+        if (clients != null ){
+            for (Client client : clients) {
+                if (client.getUserName().equals(userName)) {
+                    clients.remove(client);
+                    break;
+                }
+            }
+            for (Client client : clients) {
+                sendClients(udpServer.getUdpServerSocket(),client.getInetAddress(),client.getPort(), client.getUserName());
+            }
+        }
     }
 
 }

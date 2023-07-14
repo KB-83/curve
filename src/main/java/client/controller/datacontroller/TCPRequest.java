@@ -2,6 +2,8 @@ package client.controller.datacontroller;
 
 public class TCPRequest {
     // 0 : send Name
+    // 1 : movement;
+    // 2 : exit massage = username
     private int type;
     private String massage;
 

@@ -5,14 +5,11 @@ import client.model.Game;
 import client.view.GamePanel;
 
 public class Loop implements Runnable{
-    //    private GameState gameState;// to update
-//    private GamePanel gamePanel;// to repaint
     private Thread gameThread;
     private int FPS;
     private boolean running;
     private boolean isPaused;
     private GamePanel gamePanel;
-    //    this int is to test app rendering
     private int tryFps;
 
     public Loop(int FPS, Game game, GamePanel gamePanel) {
