@@ -4,6 +4,7 @@ import server.model.*;
 
 public class GameSnakeBodyController {
     Game game;
+    int test = 0;
 
 
     public GameSnakeBodyController(Game game) {
@@ -22,10 +23,9 @@ public class GameSnakeBodyController {
             }
         }
         else {
-
             snakeBodyPart1 = new SnakeBodyPart();
             snakeBodyPart1.setX(snake.getSnakeHead().getX());
-            snakeBodyPart1.setY(snake.getSnakeHead().getX()+SnakeBodyPart.getR()+ SnakeHead.getR());
+            snakeBodyPart1.setY(snake.getSnakeHead().getY()+SnakeBodyPart.getR()+ SnakeHead.getR());
         }
         if (snakeBodyPart1 != null) {
             snake.getSnakeBody().getSnakeBodyPartArray().add(snakeBodyPart1);

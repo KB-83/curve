@@ -8,8 +8,8 @@ import java.awt.*;
 public class GamePainter {
     public void paint(Game game, Graphics2D g2) {
         if (game != null) {
-            drawSnake(game.getPlayer1().getSnake(),g2,Color.blue);
-            drawSnake(game.getPlayer2().getSnake(),g2,Color.RED);
+            drawSnake(game.getPlayer1().getSnake(),g2,Color.YELLOW);
+            drawSnake(game.getPlayer2().getSnake(),g2,Color.BLUE);
             drawGift(game,g2);
         }
     }

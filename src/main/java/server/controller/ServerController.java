@@ -199,10 +199,14 @@ public class ServerController {
         }
     }
     private synchronized void startGame(Client client1,Client client2) {
-//        start the game
-//        todo : send the request for the other client and if it was ok start the game
         Player player1 = new Player(client1.getUserName());
+        player1.getSnake().setAngle(90);
+        player1.getSnake().getSnakeHead().setX(400);
+        player1.getSnake().getSnakeHead().setY(450);
         Player player2 = new Player(client2.getUserName());
+        player2.getSnake().setAngle(-90);
+        player2.getSnake().getSnakeHead().setX(500);
+        player2.getSnake().getSnakeHead().setY(450);
 
         client1.setPlayer(player1);
         client2.setPlayer(player2);

@@ -17,6 +17,7 @@ public class GameController implements Runnable{
     private Client client1;
     private Client client2;
     int i = 0;
+    int test = 0;
 
     public GameController(Game game,ServerController serverController,int FPS,Client client1,Client client2) {
         this.client1 = client1;
