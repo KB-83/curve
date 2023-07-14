@@ -25,13 +25,14 @@ public class ClientController {
     private Thread tcpThread;
     private DatagramSocket clientUDPSocket;
     private static final String SERVER_IP = "127.0.0.1";
-    private static final int SERVER_PORT = 9000;
+    private static final int SERVER_PORT = 9001;
     private ObjectMapper objectMapper = new ObjectMapper();
     private String userName ;
     private CurveCustomFrame curveCustomFrame;
     private BufferedReader tcpReader;
     private Game curruntGame;
     private PrintWriter tcpWriter;
+    private String waitingForMyAnswer;
 
     public ClientController() throws IOException {
         clientTCPSocket = new Socket("localhost",SERVER_PORT);
@@ -137,6 +138,10 @@ public class ClientController {
                 }
                 startGame(game);
                 break;
+            case 3 :
+                    curveCustomFrame.getRequestFrame().setItVisible(udpResponse.getMassage());
+                    waitingForMyAnswer = udpResponse.getMassage();
+                break;
         }
     }
     private void startGame(Game game){
@@ -192,6 +197,20 @@ public class ClientController {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+    public void sendJoinRequestAnswer(String answer) {
+        int type = 22;
+        if (answer.equals("YES")){
+            type = 21;
+        }
+        if (!waitingForMyAnswer.equals("")) {
+            UDPRequest udpRequest = new UDPRequest(userName, type, waitingForMyAnswer);
+            sendUDPData(udpRequest);
+        }
+        else{
+            System.out.println("oops yourOpponentHasGone");
+        }
+
     }
 
 

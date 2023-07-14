@@ -15,15 +15,16 @@ public class Client {
     private ClientController clientController;
     private Player player;
     private String userName;
-    private boolean isWaiting;
-    @JsonIgnore
+    private boolean isInWaitingRoom;
     private PrintWriter printWriter;
+    private boolean isWaitingForAnswer;
 
     public Client(InetAddress inetAddress,int port,String userName) {
         this.inetAddress = inetAddress;
         this.port = port;
         this.userName = userName;
-        isWaiting = true;
+        isInWaitingRoom = true;
+        isWaitingForAnswer = false;
     }
 
     public InetAddress getInetAddress() {
@@ -79,12 +80,12 @@ public class Client {
         this.clientController = clientController;
     }
 
-    public boolean isWaiting() {
-        return isWaiting;
+    public boolean isInWaitingRoom() {
+        return isInWaitingRoom;
     }
 
-    public void setWaiting(boolean waiting) {
-        isWaiting = waiting;
+    public void setInWaitingRoom(boolean inWaitingRoom) {
+        isInWaitingRoom = inWaitingRoom;
     }
 
     public PrintWriter getPrintWriter() {
@@ -93,5 +94,13 @@ public class Client {
 
     public void setPrintWriter(PrintWriter printWriter) {
         this.printWriter = printWriter;
+    }
+
+    public boolean isWaitingForAnswer() {
+        return isWaitingForAnswer;
+    }
+
+    public void setWaitingForAnswer(boolean waitingForAnswer) {
+        isWaitingForAnswer = waitingForAnswer;
     }
 }

@@ -21,7 +21,7 @@ public class ServerController {
     private Thread tcpThread;
 
     private ObjectMapper objectMapper = new ObjectMapper();
-    private final int PORT = 9000;
+    private final int PORT = 9001;
     public ServerController() throws IOException {
         clients = new ArrayList<>();
         tcpServer = new TCPServer(new ServerSocket(PORT));
@@ -92,14 +92,54 @@ public class ServerController {
 //                sinchronize//{
                 for (int i = 0; i < clients.size(); i++) {
                     if (clients.get(i).getUserName().equals(udpRequest.getUserName())) {
-                        startGame(clients.get(i),udpRequest);
+                        sendGameRequest(clients.get(i),udpRequest);
                         break;
                     }
                 }
                 //}
                 break;
+            case 21 :
+                gameRequestAnswer(udpRequest,true);
+                break;
+            case 22 :
+                gameRequestAnswer(udpRequest,false);
+                break;
+
         }
 
+    }
+    private void sendGameRequest(Client client,UDPRequest udpRequest){
+        Client opponent = null;
+        client.setWaitingForAnswer(true);
+        for (int i = 0; i < clients.size(); i++) {
+            if (clients.get(i).getUserName().equals(udpRequest.getOpponentName())) {
+                opponent = clients.get(i);
+                break;
+            }
+        }
+        if (opponent == null){
+            return;
+        }
+        UDPResponse udpResponse = new UDPResponse(3,udpRequest.getUserName());
+        sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,opponent.getInetAddress(),opponent.getPort());
+    }
+    private void gameRequestAnswer(UDPRequest udpRequest,boolean isYes) {
+        Client client1 = null;
+        Client client2 = null ;
+        for (Client client : clients){
+            if (client.getUserName().equals(udpRequest.getOpponentName())){
+                client1 = client;
+            }
+            else if (client.getUserName().equals(udpRequest.getUserName())) {
+                client2 = client;
+            }
+        }
+        if (isYes){
+            startGame(client1,client2);
+        }
+        else {
+            client1.setWaitingForAnswer(false);
+        }
     }
 
     private void receiveTCPSocket() {
@@ -147,7 +187,7 @@ public class ServerController {
     private void sendClients(DatagramSocket serverSocket,InetAddress address, int port,String userName) {
         ArrayList<String> clientsName = new ArrayList<>();
         for (int i = 0 ; i < clients.size(); i++) {
-            if (!clients.get(i).getUserName().equals(userName) && clients.get(i).isWaiting()) {
+            if (!clients.get(i).getUserName().equals(userName) && clients.get(i).isInWaitingRoom()) {
                 clientsName.add(clients.get(i).getUserName());
             }
         }
@@ -158,18 +198,11 @@ public class ServerController {
             throw new RuntimeException(e);
         }
     }
-    private synchronized void startGame(Client client1,UDPRequest udpRequest) {
-        Client client2 = null;
-        for (Client client : clients){
-            if (client.getUserName().equals(udpRequest.getOpponentName())) {
-                client2 = client;
-                break;
-            }
-        }
+    private synchronized void startGame(Client client1,Client client2) {
 //        start the game
 //        todo : send the request for the other client and if it was ok start the game
-        Player player1 = new Player(udpRequest.getUserName());
-        Player player2 = new Player(udpRequest.getOpponentName());
+        Player player1 = new Player(client1.getUserName());
+        Player player2 = new Player(client2.getUserName());
 
         client1.setPlayer(player1);
         client2.setPlayer(player2);
@@ -183,13 +216,13 @@ public class ServerController {
             throw new RuntimeException(e);
         }
         for (int i = 0; i < clients.size(); i++){
-            if (clients.get(i).getUserName().equals(udpRequest.getUserName())){
-                clients.get(i).setWaiting(false);
+            if (clients.get(i).getUserName().equals(client1.getUserName())){
+                clients.get(i).setInWaitingRoom(false);
                 sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,clients.get(i).
                         getInetAddress(),clients.get(i).getPort());
             }
-            else if (clients.get(i).getUserName().equals(udpRequest.getOpponentName())) {
-                clients.get(i).setWaiting(false);
+            else if (clients.get(i).getUserName().equals(client2.getUserName())) {
+                clients.get(i).setInWaitingRoom(false);
                 sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,clients.get(i).
                         getInetAddress(),clients.get(i).getPort());
             }

@@ -4,7 +4,10 @@ public class UDPRequest {
     private String userName;
     //0 = join
     //1 = start with an opponent
-    //2 = get Clients List
+    //2 answare of other client to joining to game
+    //21 yes
+    //22 no
+
     private int requestNum;
     private String opponentName;
 

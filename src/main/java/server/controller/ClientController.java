@@ -3,15 +3,12 @@ package server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import server.Main;
 import server.controller.datacontroller.TCPRequest;
 import server.controller.datacontroller.TCPResponse;
-import server.controller.datacontroller.UDPRequest;
 import server.model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 
 public class ClientController extends Thread{
@@ -60,7 +57,6 @@ public class ClientController extends Thread{
             case 0:
                 break;
             case 1:
-                System.out.println(tcpRequest.getMassage());
                 snakeMoveRequest(tcpRequest.getMassage());
                 break;
         }

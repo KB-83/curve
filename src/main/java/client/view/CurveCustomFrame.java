@@ -8,9 +8,10 @@ public class CurveCustomFrame extends JFrame {
 //    GraphicManager gM;
     public CardPanel cardPanel;
     private ClientController clientController;
+    private RequestFrame requestFrame;
     public CurveCustomFrame(ClientController clientController) {
         this.clientController = clientController;
-//        this.gM = gM;
+        requestFrame = new RequestFrame(clientController);
         this.cardPanel = new CardPanel(clientController);
         this.setFocusable(false);
         this.add(cardPanel);
@@ -21,5 +22,9 @@ public class CurveCustomFrame extends JFrame {
 
         this.revalidate();
         this.setVisible(true);
+    }
+
+    public RequestFrame getRequestFrame() {
+        return requestFrame;
     }
 }

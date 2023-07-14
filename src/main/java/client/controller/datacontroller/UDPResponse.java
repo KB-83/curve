@@ -3,6 +3,9 @@ package client.controller.datacontroller;
 public class UDPResponse {
     //0 answare of login
     //1 playersArrayList
+    //2 start game
+    //3 = give answare to start a game
+
     private int type;
     private String massage;
 
