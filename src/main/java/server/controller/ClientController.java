@@ -64,6 +64,9 @@ public class ClientController extends Thread{
     private void snakeMoveRequest(String direction){
         int angle = 10;
         Snake snake = client.getPlayer().getSnake();
+        if (client.getPlayer().isGij()){
+            angle = -angle;
+        }
         switch (direction) {
             case "RIGHT":
                 snake.setAngle(snake.getAngle() + angle);

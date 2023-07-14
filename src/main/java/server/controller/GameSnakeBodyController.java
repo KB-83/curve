@@ -9,8 +9,7 @@ public class GameSnakeBodyController {
     public GameSnakeBodyController(Game game) {
         this.game = game;
     }
-    public void addBody(){
-        Snake snake = game.getPlayer1().getSnake();
+    public void addBody(Snake snake){
         SnakeBodyPart snakeBodyPart = snake.getLastSnakeBodyPart();
         SnakeBodyPart snakeBodyPart1 = null;
         if (snakeBodyPart != null){
@@ -29,7 +28,7 @@ public class GameSnakeBodyController {
             snakeBodyPart1.setY(snake.getSnakeHead().getX()+SnakeBodyPart.getR()+ SnakeHead.getR());
         }
         if (snakeBodyPart1 != null) {
-            game.getPlayer1().getSnake().getSnakeBody().getSnakeBodyPartArray().add(snakeBodyPart1);
+            snake.getSnakeBody().getSnakeBodyPartArray().add(snakeBodyPart1);
             snake.setLastSnakeBodyPart(snakeBodyPart1);
         }
 

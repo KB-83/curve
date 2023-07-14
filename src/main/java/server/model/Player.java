@@ -1,9 +1,14 @@
 package server.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Player {
     private Snake snake;
     private Gift gift;
     private String name;
+    @JsonIgnore
+    private boolean gij;
 
     public Player() {
         snake = new Snake();
@@ -36,5 +41,13 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isGij() {
+        return gij;
+    }
+
+    public void setGij(boolean gij) {
+        this.gij = gij;
     }
 }

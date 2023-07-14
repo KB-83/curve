@@ -8,6 +8,8 @@ public class Snake {
     @JsonIgnore
     private double vX,vY;
     @JsonIgnore
+    private int pureV;
+    @JsonIgnore
     private int angle;
     @JsonIgnore
     private SnakeBodyPart lastSnakeBodyPart;
@@ -15,6 +17,7 @@ public class Snake {
     public Snake() {
         snakeHead = new SnakeHead();
         snakeBody = new SnakeBody();
+        pureV = 4;
     }
 
     public SnakeHead getSnakeHead() {
@@ -62,5 +65,13 @@ public class Snake {
 
     public void setAngle(int angle) {
         this.angle = angle;
+    }
+
+    public int getPureV() {
+        return pureV;
+    }
+
+    public void setPureV(int pureV) {
+        this.pureV = pureV;
     }
 }

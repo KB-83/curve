@@ -21,6 +21,7 @@ public class MovementListener implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_RIGHT){
             clientController.movementRequest("RIGHT");
+
         }
         if (e.getKeyCode() == KeyEvent.VK_LEFT){
             clientController.movementRequest("LEFT");

@@ -2,6 +2,8 @@ package server.controller;
 
 import server.model.*;
 
+import java.util.ArrayList;
+
 public class GameGiftController {
     private Game game;
     public final static int WIDTH = 1000;
@@ -11,9 +13,15 @@ public class GameGiftController {
     public GameGiftController(Game game) {
         this.game = game;
     }
-    public void handleGifts(){}
+    public void handleGifts(){
+        checkGiftExpireTime(game.getPlayer1());
+        checkGiftExpireTime(game.getPlayer2());
+        unlockGift(game.getPlayer1());
+        unlockGift(game.getPlayer2());
+    }
     public void createGift(){
-        if (game.getPlayerOneGift() == null && game.getPlayerTwoGift() == null && game.getActivatedGift() == null){
+//        game.getPlayer1().getGift() == null && game.getPlayer2().getGift() == null &&
+        if (game.getActivatedGift() == null){
             Point location = giftLocationGenerator();
             int i = (int) (4 *Math.random());
             Gift gift = null;
@@ -62,4 +70,74 @@ public class GameGiftController {
         }
         return answer;
     }
+    private void unlockGift(Player player){
+        if (game.getActivatedGift() == null) {
+            return;
+        }
+        SnakeHead snakeHead = player.getSnake().getSnakeHead();
+        Gift gift = game.getActivatedGift();
+        if (Point.distance(snakeHead.getX(),snakeHead.getY(),gift.getX(),gift.getY()) <= R+SnakeHead.getR()) {
+            if (player.getGift() != null){
+                disActiveGift(player, player.getGift());
+            }
+            activeGift(player,gift);
+        }
+    }
+    private void checkGiftExpireTime(Player player) {
+        if (player.getGift() == null) {
+            return;
+        }
+        if (System.currentTimeMillis() - player.getGift().getActiveTime() > 5000) {
+            disActiveGift(player, player.getGift());
+            player.setGift(null);
+        }
+    }
+    private void activeGift(Player player,Gift gift){
+        game.setActivatedGift(null);
+        Player otherPlayer = game.getPlayer1();
+        if (otherPlayer.equals(player)) {
+            otherPlayer = game.getPlayer2();
+        }
+        switch (gift.getClass().getSimpleName()){
+            case "Freeze":
+                otherPlayer.getSnake().setPureV(otherPlayer.getSnake().getPureV()/2);
+                gift.setActiveTime(System.currentTimeMillis());
+                player.setGift(gift);
+                break;
+            case "Boost":
+                player.setGift(gift);
+                otherPlayer.getSnake().setPureV(otherPlayer.getSnake().getPureV() * 2);
+                gift.setActiveTime(System.currentTimeMillis());
+                break;
+            case "Confuse":
+                otherPlayer.setGij(true);
+                gift.setActiveTime(System.currentTimeMillis());
+                player.setGift(gift);
+                break;
+            case "Clear":
+                game.getPlayer1().getSnake().getSnakeBody().setSnakeBodyPartArray(new ArrayList<>());
+                game.getPlayer2().getSnake().getSnakeBody().setSnakeBodyPartArray(new ArrayList<>());
+                break;
+        }
+    }
+    private void disActiveGift(Player player,Gift gift){
+        player.setGift(null);
+        Player otherPlayer = game.getPlayer1();
+        if (otherPlayer.equals(player)) {
+            otherPlayer = game.getPlayer2();
+        }
+        switch (gift.getClass().getSimpleName()){
+            case "Freeze":
+                otherPlayer.getSnake().setPureV(otherPlayer.getSnake().getPureV()*2);
+
+                break;
+            case "Boost":
+                otherPlayer.getSnake().setPureV(otherPlayer.getSnake().getPureV() / 2);
+                break;
+            case "Confuse":
+                otherPlayer.setGij(false);
+                break;
+        }
+    }
+
 }

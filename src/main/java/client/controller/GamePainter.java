@@ -8,8 +8,8 @@ import java.awt.*;
 public class GamePainter {
     public void paint(Game game, Graphics2D g2) {
         if (game != null) {
-            drawSnake(game.getPlayer1().getSnake(),g2,Color.YELLOW);
-            drawSnake(game.getPlayer2().getSnake(),g2,Color.BLUE);
+            drawSnake(game.getPlayer1().getSnake(),g2,Color.blue);
+            drawSnake(game.getPlayer2().getSnake(),g2,Color.RED);
             drawGift(game,g2);
         }
     }
@@ -23,7 +23,8 @@ public class GamePainter {
 
         if (snake.getSnakeBody().getSnakeBodyPartArray() != null) {
             for (SnakeBodyPart snakeBodyPart : snake.getSnakeBody().getSnakeBodyPartArray()) {
-                g2.setColor(color);
+                Color bodyColor = new Color(color.getRGB());  // Create a new Color object with the same RGB values
+                g2.setColor(bodyColor);
                 g2.fillOval(snakeBodyPart.getX()-SnakeBodyPart.getR(),snakeBodyPart.getY()-SnakeBodyPart.getR()
                         ,2*SnakeBodyPart.getR(),2*SnakeBodyPart.getR());
             }

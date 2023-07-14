@@ -1,6 +1,7 @@
 package server.controller;
 import server.model.Client;
 import server.model.Game;
+import server.model.Snake;
 
 public class GameController implements Runnable{
     private ServerController serverController;
@@ -78,18 +79,14 @@ public class GameController implements Runnable{
         }
     }
     private void updateGame() {
-        gameSnakeBodyController.addBody();
+        gameSnakeBodyController.addBody(game.getPlayer1().getSnake());
+        gameSnakeBodyController.addBody(game.getPlayer2().getSnake());
         gameDeathController.checkPlayersDeath();
         gameGiftController.handleGifts();
         gameGiftController.createGift();
-        double v = 4;
+        setSnakeV(game.getPlayer1().getSnake());
+        setSnakeV(game.getPlayer2().getSnake());
         if (i == 4) {
-            double vX = Math.cos(Math.toRadians(game.getPlayer1().getSnake().getAngle())) * v;
-            double vY = Math.sin(Math.toRadians(game.getPlayer1().getSnake().getAngle())) * v;
-            game.getPlayer1().getSnake().setvY(vY);
-            game.getPlayer1().getSnake().setvX(vX);
-            game.getPlayer2().getSnake().getSnakeHead().setY(100);
-//        game.getPlayer1().getSnake().getSnakeHead().setX(30);
             game.getPlayer1().getSnake().getSnakeHead().setX((int) (game.getPlayer1().getSnake().getSnakeHead().getX() + game.getPlayer1().getSnake().getvX()));
             game.getPlayer1().getSnake().getSnakeHead().setY((int) (game.getPlayer1().getSnake().getSnakeHead().getY() + game.getPlayer1().getSnake().getvY()));
             game.getPlayer2().getSnake().getSnakeHead().setX((int) (game.getPlayer2().getSnake().getSnakeHead().getX() + game.getPlayer2().getSnake().getvX()));
@@ -97,5 +94,12 @@ public class GameController implements Runnable{
             i = 0;
         }
         i ++;
+    }
+    private void setSnakeV(Snake snake){
+        int pureV = snake.getPureV();
+        double vX = Math.cos(Math.toRadians(snake.getAngle())) * pureV;
+        double vY = Math.sin(Math.toRadians(snake.getAngle())) * pureV;
+        snake.setvY(vY);
+        snake.setvX(vX);
     }
 }

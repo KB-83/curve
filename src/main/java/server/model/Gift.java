@@ -16,6 +16,8 @@ public abstract class Gift {
     private int x,y;
     @JsonIgnore
     private GiftController giftController;
+    @JsonIgnore
+    private long activeTime;
 
     public Gift() {
         giftController = new GiftController();
@@ -43,5 +45,13 @@ public abstract class Gift {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public long getActiveTime() {
+        return activeTime;
+    }
+
+    public void setActiveTime(long activeTime) {
+        this.activeTime = activeTime;
     }
 }
