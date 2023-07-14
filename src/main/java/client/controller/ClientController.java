@@ -1,8 +1,11 @@
-package client;
+package client.controller;
 
+import client.controller.datacontroller.TCPRequest;
+import client.controller.datacontroller.TCPResponse;
+import client.controller.datacontroller.UDPRequest;
+import client.controller.datacontroller.UDPResponse;
 import client.listener.MovementListener;
-import client.models.Game;
-import client.models.GameController;
+import client.model.Game;
 import client.view.CurveCustomFrame;
 import client.view.GamePanel;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,7 +47,7 @@ public class ClientController {
             @Override
             public void run() {
                 while (true) {
-                    String response = receiveUDPData();
+                    UDPResponse response = receiveUDPData();
                     handleUDPData(response);
                 }
             }
@@ -78,7 +81,7 @@ public class ClientController {
         UDPRequest startRequest = new UDPRequest(userName,1,opponentName);
         sendUDPData(startRequest);
     }
-    private String receiveUDPData(){
+    private UDPResponse receiveUDPData(){
         byte[] receiveData = new byte[60000];
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         try {
@@ -87,9 +90,15 @@ public class ClientController {
             throw new RuntimeException(e);
         }
         String response = new String(receivePacket.getData(), 0, receivePacket.getLength());
-        return response;
+        UDPResponse udpResponse;
+        try {
+            udpResponse = objectMapper.readValue(response,UDPResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return udpResponse;
     }
-    private void sendUDPData(Request request){
+    private void sendUDPData(UDPRequest request){
         try {
             byte[] sendData = objectMapper.writeValueAsString(request).getBytes();
             InetAddress serverAddress = InetAddress.getByName(SERVER_IP);
@@ -104,13 +113,7 @@ public class ClientController {
         }
     }
 
-    private void handleUDPData(String s){
-        UDPResponse udpResponse;
-        try {
-            udpResponse = objectMapper.readValue(s,UDPResponse.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    private void handleUDPData(UDPResponse udpResponse){
         switch (udpResponse.getType()) {
             case 0:
                 joinResponse(udpResponse.getMassage());
@@ -178,7 +181,6 @@ public class ClientController {
                 try {
                     curruntGame = objectMapper.readValue(tcpResponse.getMassage(), Game.class);
                     curveCustomFrame.cardPanel.getGamePanel().setGame(curruntGame);
-//                    System.out.println(curruntGame+"191");
                 } catch (JsonMappingException e) {
                     throw new RuntimeException(e);
                 } catch (JsonProcessingException e) {

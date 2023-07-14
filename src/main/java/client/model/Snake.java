@@ -1,4 +1,4 @@
-package client.models;
+package client.model;
 
 public class Snake {
     private SnakeHead snakeHead;

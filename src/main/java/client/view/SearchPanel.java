@@ -1,13 +1,12 @@
 package client.view;
 
-import client.ClientController;
+import client.controller.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SearchPanel extends CurveCustomPanel{
     private CardPanel cardPanel;

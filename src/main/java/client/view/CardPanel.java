@@ -1,9 +1,8 @@
 package client.view;
 
-import client.ClientController;
+import client.controller.ClientController;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class CardPanel extends CurveCustomPanel{
     private final CardLayout cardLayout = new CardLayout();

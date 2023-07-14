@@ -1,12 +1,12 @@
-package client.models;
+package client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class SnakeHead {
+public class SnakeBodyPart {
     private int x,y;
     @JsonIgnore
-    private static final int R = 15;
-    public SnakeHead() {
+    private static final int R = 7;
+    public SnakeBodyPart() {
     }
 
     public int getX() {

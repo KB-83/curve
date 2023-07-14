@@ -1,4 +1,4 @@
-package client;
+package client.controller.datacontroller;
 
 public class TCPResponse {
     // 0 : game update

@@ -1,6 +1,6 @@
 package client.listener;
 
-import client.ClientController;
+import client.controller.ClientController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,9 +29,6 @@ public class MovementListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-        }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT){
-        }
+
     }
 }

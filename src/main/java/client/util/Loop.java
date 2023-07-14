@@ -1,7 +1,7 @@
 package client.util;
 
 
-import client.models.Game;
+import client.model.Game;
 import client.view.GamePanel;
 
 public class Loop implements Runnable{

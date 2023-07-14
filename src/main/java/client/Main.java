@@ -1,6 +1,8 @@
 package client;
 
 
+import client.controller.ClientController;
+
 import java.io.IOException;
 
 public class Main {

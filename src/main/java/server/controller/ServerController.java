@@ -22,7 +22,6 @@ public class ServerController {
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private final int PORT = 9000;
-    public final static boolean LIFE_IS_HARD = true;
     public ServerController() throws IOException {
         clients = new ArrayList<>();
         tcpServer = new TCPServer(new ServerSocket(PORT));
@@ -42,7 +41,6 @@ public class ServerController {
             @Override
             public void run() {
                 while (true) {
-                    // har client bayad montazere request khodesh bashe
                     receiveTCPSocket();
                 }
             }
@@ -83,10 +81,6 @@ public class ServerController {
                     }
                 }
                 Client client = new Client(receivePacket.getAddress(), receivePacket.getPort(), udpRequest.getUserName());
-                //todo : haminja socket ham begir
-//                ClientController clientController = new ClientController(tcpServer, objectMapper,, client);
-//                client.setClientController(clientController);
-//                clientController.control();
                 clients.add(client);
                 UDPResponse udpResponse = new UDPResponse(0,"TRUE");
                 sendUdpMessage(udpServer.getUdpServerSocket(),udpResponse,receivePacket.getAddress(),receivePacket.getPort());
@@ -118,6 +112,7 @@ public class ServerController {
                 if (client.getUserName().equals(username)) {
                     client.setSocket(socket);
                     ClientController clientController = new ClientController(tcpServer,objectMapper,bufferedReader,client);
+                    client.setClientController(clientController);
                     clientController.start();
                 }
             }
@@ -126,24 +121,15 @@ public class ServerController {
         }
 
 
-//        String jsonResponse = reader.readLine();
     }
-    private void sendTCPData(){}
-    private void handleTCPData(TCPResponse tcpResponse){}
     public void sendGameState(Client client1, Client client2, Game game) {
 
         try {
             String json = objectMapper.writeValueAsString(game);
             TCPResponse tcpResponse = new TCPResponse(0,json);
-            String response = objectMapper.writeValueAsString(tcpResponse);
-            PrintWriter printWriter1 = new PrintWriter(client1.getSocket().getOutputStream(),true);
-            PrintWriter printWriter2 = new PrintWriter(client2.getSocket().getOutputStream(),true);
+            client1.getClientController().sendTCPData(tcpResponse);
+            client2.getClientController().sendTCPData(tcpResponse);
 
-            printWriter1.println(response);
-            printWriter2.println(response);
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -181,6 +167,7 @@ public class ServerController {
             }
         }
 //        start the game
+//        todo : send the request for the other client and if it was ok start the game
         Player player1 = new Player(udpRequest.getUserName());
         Player player2 = new Player(udpRequest.getOpponentName());
 

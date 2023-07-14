@@ -1,9 +1,8 @@
 package client.view;
 
-import client.ClientController;
+import client.controller.ClientController;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class CurveCustomFrame extends JFrame {
 //    GraphicManager gM;

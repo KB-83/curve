@@ -1,14 +1,17 @@
 package server.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import server.Main;
 import server.controller.datacontroller.TCPRequest;
+import server.controller.datacontroller.TCPResponse;
 import server.controller.datacontroller.UDPRequest;
 import server.model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 
 public class ClientController extends Thread{
@@ -43,15 +46,6 @@ public class ClientController extends Thread{
             throw new RuntimeException(e);
         }
     }
-//    public void handleTCPRequest(UDPRequest udpRequest) {
-//        if (udpRequest.getRequestNum() == 1){
-////            start the game
-//            Player player1 = new Player(udpRequest.getUserName());
-//            Player player2 = new Player(udpRequest.getUserName());
-//            Game game = new Game(player1,player2);
-//            // start GameController and sen it to both clients
-//        }
-//    }
     private void receiveTCPConnection() {
         try {
             String json = reader.readLine();
@@ -81,6 +75,14 @@ public class ClientController extends Thread{
             case "LEFT":
                 snake.setAngle(snake.getAngle() - angle);
                 break;
+        }
+    }
+    public void sendTCPData(TCPResponse tcpResponse) {
+        try {
+            String response = objectMapper.writeValueAsString(tcpResponse);
+            client.getPrintWriter().println(response);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 }

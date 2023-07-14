@@ -1,5 +1,6 @@
-package client.models;
+package client.controller;
 
+import client.model.Game;
 import client.util.Loop;
 import client.view.GamePanel;
 

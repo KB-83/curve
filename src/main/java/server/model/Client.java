@@ -1,7 +1,10 @@
 package server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import server.controller.ClientController;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -13,6 +16,8 @@ public class Client {
     private Player player;
     private String userName;
     private boolean isWaiting;
+    @JsonIgnore
+    private PrintWriter printWriter;
 
     public Client(InetAddress inetAddress,int port,String userName) {
         this.inetAddress = inetAddress;
@@ -35,6 +40,11 @@ public class Client {
 
     public void setSocket(Socket socket) {
         this.socket = socket;
+        try {
+            printWriter = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int getPort() {
@@ -75,5 +85,13 @@ public class Client {
 
     public void setWaiting(boolean waiting) {
         isWaiting = waiting;
+    }
+
+    public PrintWriter getPrintWriter() {
+        return printWriter;
+    }
+
+    public void setPrintWriter(PrintWriter printWriter) {
+        this.printWriter = printWriter;
     }
 }

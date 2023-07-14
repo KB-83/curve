@@ -1,8 +1,6 @@
-package client;
+package client.controller.datacontroller;
 
-import java.net.Socket;
-
-public class UDPRequest extends Request{
+public class UDPRequest {
     private String userName;
     //0 = join
     //1 = start with an opponent

@@ -1,15 +1,14 @@
-package client;
+package client.controller.datacontroller;
 
-public class UDPResponse {
-    //0 answare of login
-    //1 playersArrayList
+public class TCPRequest {
+    // 0 : send Name
     private int type;
     private String massage;
 
-    public UDPResponse() {
+    public TCPRequest() {
     }
 
-    public UDPResponse(int type, String massage) {
+    public TCPRequest(int type, String massage) {
         this.type = type;
         this.massage = massage;
     }

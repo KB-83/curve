@@ -1,4 +1,4 @@
-package client.models;
+package client.model;
 
 public abstract class Gift {
     private int x,y;

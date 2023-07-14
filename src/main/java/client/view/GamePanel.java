@@ -1,10 +1,9 @@
 package client.view;
 
-import client.ClientController;
+import client.controller.ClientController;
 import client.controller.GamePainter;
-import client.models.Game;
+import client.model.Game;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 
