@@ -31,10 +31,10 @@ public class GamePainter {
         }
     }
     private void drawGift(Game game, Graphics2D g2) {
-        g2.setColor(Color.GREEN);
         if (game.getActivatedGift() != null) {
             Gift gift = game.getActivatedGift();
-            g2.drawOval(gift.getX() - Gift.R, gift.getY() - Gift.R, 2 *Gift.R,2 *Gift.R);
+            g2.setColor(game.getActivatedGift().getColor());
+            g2.fillOval(gift.getX() - Gift.R, gift.getY() - Gift.R, 2 *Gift.R,2 *Gift.R);
         }
     }
 

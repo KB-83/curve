@@ -1,7 +1,10 @@
 package client.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import java.awt.*;
 
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
@@ -14,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class Gift {
     private int x,y;
     public final static int R = 13;
+    @JsonIgnore
+    private Color color;
 
     public Gift() {
     }
@@ -32,5 +37,13 @@ public abstract class Gift {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
